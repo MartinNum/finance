@@ -1,0 +1,53 @@
+[     172ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://localhost:3000/api/report/summary?start_date=2026-05-31&end_date=2026-06-29:0
+[     173ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://localhost:3000/api/expenses?start_date=2026-05-31&end_date=2026-06-29:0
+[     212ms] AxiosError: Request failed with status code 422
+    at settle (http://localhost:3000/node_modules/.vite/deps/axios.js?v=fef69823:1457:12)
+    at XMLHttpRequest.onloadend (http://localhost:3000/node_modules/.vite/deps/axios.js?v=fef69823:1862:7)
+    at Axios.request (http://localhost:3000/node_modules/.vite/deps/axios.js?v=fef69823:2743:41)
+    at async Promise.all (index 0)
+    at async loadData (http://localhost:3000/src/views/Dashboard.vue:31:47)
+[     173ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://localhost:3000/api/wages?start_date=2026-05-31&end_date=2026-06-29:0
+[   71024ms] [WARNING] Invalid prop: validation failed for prop "type". Expected one of ["primary", "success", "info", "warning", "danger"], got value "". null at <ElTag>
+at <TableTdWrapper>
+at <ElTableBody>
+at <ElScrollbar>
+at <ElTable>
+at <UserManage>
+at <RouterView>
+at <ElMain>
+at <ElContainer>
+at <ElContainer>
+at <App> [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object] @ http://localhost:3000/node_modules/.vite/deps/element-plus.js?v=fef69823:25527
+[   71025ms] [WARNING] Invalid prop: custom validator check failed for prop "type". null at <ElTag>
+at <TableTdWrapper>
+at <ElTableBody>
+at <ElScrollbar>
+at <ElTable>
+at <UserManage>
+at <RouterView>
+at <ElMain>
+at <ElContainer>
+at <ElContainer>
+at <App> [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object] @ http://localhost:3000/node_modules/.vite/deps/element-plus.js?v=fef69823:25527
+[   71078ms] [WARNING] Invalid prop: validation failed for prop "type". Expected one of ["primary", "success", "info", "warning", "danger"], got value "". Proxy(Object) at <ElTag>
+at <TableTdWrapper>
+at <ElTableBody>
+at <ElScrollbar>
+at <ElTable>
+at <UserManage>
+at <RouterView>
+at <ElMain>
+at <ElContainer>
+at <ElContainer>
+at <App> [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object] @ http://localhost:3000/node_modules/.vite/deps/element-plus.js?v=fef69823:25527
+[   71078ms] [WARNING] Invalid prop: custom validator check failed for prop "type". Proxy(Object) at <ElTag>
+at <TableTdWrapper>
+at <ElTableBody>
+at <ElScrollbar>
+at <ElTable>
+at <UserManage>
+at <RouterView>
+at <ElMain>
+at <ElContainer>
+at <ElContainer>
+at <App> [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object] @ http://localhost:3000/node_modules/.vite/deps/element-plus.js?v=fef69823:25527

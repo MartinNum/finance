@@ -1,0 +1,84 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]: 记账系统
+    - generic [ref=e8] [cursor=pointer]:
+      - generic:
+        - combobox [ref=e10]
+        - generic [ref=e11]: 新华园区
+      - img [ref=e14]
+    - generic [ref=e18] [cursor=pointer]:
+      - generic:
+        - combobox [ref=e20]
+        - generic [ref=e21]: 2026年周期
+      - img [ref=e24]
+    - menubar [ref=e26]:
+      - menuitem "首页概览" [ref=e27] [cursor=pointer]:
+        - img [ref=e29]
+        - generic [ref=e31]: 首页概览
+      - menuitem "成本管理" [ref=e32]:
+        - generic [ref=e33] [cursor=pointer]:
+          - img [ref=e35]
+          - generic [ref=e37]: 成本管理
+          - img [ref=e39]
+      - menuitem "财务" [ref=e41]:
+        - generic [ref=e42] [cursor=pointer]:
+          - img [ref=e44]
+          - generic [ref=e48]: 财务
+          - img [ref=e50]
+      - menuitem "报表面板" [ref=e52] [cursor=pointer]:
+        - img [ref=e54]
+        - generic [ref=e56]: 报表面板
+      - menuitem "系统设置" [expanded] [ref=e57]:
+        - generic [ref=e58] [cursor=pointer]:
+          - img [ref=e60]
+          - generic [ref=e62]: 系统设置
+          - img [ref=e64]
+        - menu [ref=e325]:
+          - menuitem "周期管理" [ref=e326] [cursor=pointer]
+          - menuitem "工种管理" [ref=e327] [cursor=pointer]
+          - menuitem "支出分类管理" [ref=e328] [cursor=pointer]
+          - menuitem "葡萄等级" [ref=e329] [cursor=pointer]
+          - menuitem "园区管理" [active] [ref=e330] [cursor=pointer]
+          - menuitem "用户管理" [ref=e331] [cursor=pointer]
+  - generic [ref=e66]:
+    - generic [ref=e67]:
+      - generic [ref=e68]: 管理员
+      - button "退出" [ref=e69] [cursor=pointer]:
+        - generic [ref=e70]: 退出
+    - main [ref=e71]:
+      - generic [ref=e332]:
+        - generic [ref=e333]:
+          - heading "园区管理" [level=2] [ref=e334]
+          - button "新建园区" [ref=e335] [cursor=pointer]:
+            - generic [ref=e336]: 新建园区
+        - generic [ref=e338]:
+          - table [ref=e340]:
+            - rowgroup [ref=e347]:
+              - row "ID 园区名称 状态 创建时间 操作" [ref=e348]:
+                - columnheader "ID" [ref=e349]:
+                  - generic [ref=e350]: ID
+                - columnheader "园区名称" [ref=e351]:
+                  - generic [ref=e352]: 园区名称
+                - columnheader "状态" [ref=e353]:
+                  - generic [ref=e354]: 状态
+                - columnheader "创建时间" [ref=e355]:
+                  - generic [ref=e356]: 创建时间
+                - columnheader "操作" [ref=e357]:
+                  - generic [ref=e358]: 操作
+          - table [ref=e363]:
+            - rowgroup [ref=e370]:
+              - row "1 新华园区 启用 2026/6/10 12:48:53 编辑 停用" [ref=e371]:
+                - cell "1" [ref=e372]:
+                  - generic [ref=e373]: "1"
+                - cell "新华园区" [ref=e374]:
+                  - generic [ref=e375]: 新华园区
+                - cell "启用" [ref=e376]:
+                  - generic [ref=e379]: 启用
+                - cell "2026/6/10 12:48:53" [ref=e380]:
+                  - generic [ref=e381]: 2026/6/10 12:48:53
+                - cell "编辑 停用" [ref=e382]:
+                  - generic [ref=e383]:
+                    - button "编辑" [ref=e384] [cursor=pointer]:
+                      - generic [ref=e385]: 编辑
+                    - button "停用" [ref=e386] [cursor=pointer]:
+                      - generic [ref=e387]: 停用

@@ -1,0 +1,121 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]: 记账系统
+    - generic [ref=e8] [cursor=pointer]:
+      - generic:
+        - combobox [ref=e10]
+        - generic [ref=e11]: 新华园区
+      - img [ref=e14]
+    - generic [ref=e18] [cursor=pointer]:
+      - generic:
+        - combobox [ref=e20]
+        - generic [ref=e21]: 2026年周期
+      - img [ref=e24]
+    - menubar [ref=e26]:
+      - menuitem "首页概览" [ref=e27] [cursor=pointer]:
+        - img [ref=e29]
+        - generic [ref=e31]: 首页概览
+      - menuitem "成本管理" [ref=e32]:
+        - generic [ref=e33] [cursor=pointer]:
+          - img [ref=e35]
+          - generic [ref=e37]: 成本管理
+          - img [ref=e39]
+      - menuitem "财务" [ref=e41]:
+        - generic [ref=e42] [cursor=pointer]:
+          - img [ref=e44]
+          - generic [ref=e48]: 财务
+          - img [ref=e50]
+      - menuitem "报表面板" [ref=e52] [cursor=pointer]:
+        - img [ref=e54]
+        - generic [ref=e56]: 报表面板
+      - menuitem "系统设置" [expanded] [ref=e57]:
+        - generic [ref=e58] [cursor=pointer]:
+          - img [ref=e60]
+          - generic [ref=e62]: 系统设置
+          - img [ref=e64]
+        - menu [ref=e325]:
+          - menuitem "周期管理" [ref=e326] [cursor=pointer]
+          - menuitem "工种管理" [ref=e327] [cursor=pointer]
+          - menuitem "支出分类管理" [ref=e328] [cursor=pointer]
+          - menuitem "葡萄等级" [ref=e329] [cursor=pointer]
+          - menuitem "园区管理" [ref=e330] [cursor=pointer]
+          - menuitem "用户管理" [active] [ref=e331] [cursor=pointer]
+  - generic [ref=e66]:
+    - generic [ref=e67]:
+      - generic [ref=e68]: 管理员
+      - button "退出" [ref=e69] [cursor=pointer]:
+        - generic [ref=e70]: 退出
+    - main [ref=e71]:
+      - generic [ref=e389]:
+        - generic [ref=e390]:
+          - heading "用户管理" [level=2] [ref=e391]
+          - generic [ref=e392]:
+            - generic [ref=e394] [cursor=pointer]:
+              - generic:
+                - combobox [ref=e396]
+                - generic [ref=e397]: 按园区筛选
+              - img [ref=e400]
+            - button "新建用户" [ref=e402] [cursor=pointer]:
+              - generic [ref=e403]: 新建用户
+        - generic [ref=e405]:
+          - table [ref=e407]:
+            - rowgroup [ref=e416]:
+              - row "ID 用户名 姓名 角色 所属园区 状态 操作" [ref=e417]:
+                - columnheader "ID" [ref=e418]:
+                  - generic [ref=e419]: ID
+                - columnheader "用户名" [ref=e420]:
+                  - generic [ref=e421]: 用户名
+                - columnheader "姓名" [ref=e422]:
+                  - generic [ref=e423]: 姓名
+                - columnheader "角色" [ref=e424]:
+                  - generic [ref=e425]: 角色
+                - columnheader "所属园区" [ref=e426]:
+                  - generic [ref=e427]: 所属园区
+                - columnheader "状态" [ref=e428]:
+                  - generic [ref=e429]: 状态
+                - columnheader "操作" [ref=e430]:
+                  - generic [ref=e431]: 操作
+          - table [ref=e436]:
+            - rowgroup [ref=e445]:
+              - row "1 admin 管理员 管理员 - 启用 编辑 重置密码 停用" [ref=e446]:
+                - cell "1" [ref=e447]:
+                  - generic [ref=e448]: "1"
+                - cell "admin" [ref=e449]:
+                  - generic [ref=e450]: admin
+                - cell "管理员" [ref=e451]:
+                  - generic [ref=e452]: 管理员
+                - cell "管理员" [ref=e453]:
+                  - generic [ref=e456]: 管理员
+                - cell "-" [ref=e457]:
+                  - generic [ref=e458]: "-"
+                - cell "启用" [ref=e459]:
+                  - generic [ref=e462]: 启用
+                - cell "编辑 重置密码 停用" [ref=e463]:
+                  - generic [ref=e464]:
+                    - button "编辑" [ref=e465] [cursor=pointer]:
+                      - generic [ref=e466]: 编辑
+                    - button "重置密码" [ref=e467] [cursor=pointer]:
+                      - generic [ref=e468]: 重置密码
+                    - button "停用" [ref=e469] [cursor=pointer]:
+                      - generic [ref=e470]: 停用
+              - row "2 maxinghua 马兴华 用户 新华园区 启用 编辑 重置密码 停用" [ref=e471]:
+                - cell "2" [ref=e472]:
+                  - generic [ref=e473]: "2"
+                - cell "maxinghua" [ref=e474]:
+                  - generic [ref=e475]: maxinghua
+                - cell "马兴华" [ref=e476]:
+                  - generic [ref=e477]: 马兴华
+                - cell "用户" [ref=e478]:
+                  - generic [ref=e481]: 用户
+                - cell "新华园区" [ref=e482]:
+                  - generic [ref=e483]: 新华园区
+                - cell "启用" [ref=e484]:
+                  - generic [ref=e487]: 启用
+                - cell "编辑 重置密码 停用" [ref=e488]:
+                  - generic [ref=e489]:
+                    - button "编辑" [ref=e490] [cursor=pointer]:
+                      - generic [ref=e491]: 编辑
+                    - button "重置密码" [ref=e492] [cursor=pointer]:
+                      - generic [ref=e493]: 重置密码
+                    - button "停用" [ref=e494] [cursor=pointer]:
+                      - generic [ref=e495]: 停用
