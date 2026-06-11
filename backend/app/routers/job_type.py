@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from ..database import get_db
-from ..auth import get_current_park_id
+from ..auth import get_current_park_id, require_edit_permission
 from .. import models, schemas
 
 router = APIRouter()
@@ -24,6 +24,7 @@ def list_job_types(
 def create_job_type(
     job_type: schemas.JobTypeCreate,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     existing = db.query(models.JobType).filter(
@@ -51,6 +52,7 @@ def update_job_type(
     job_type_id: int,
     job_type: schemas.JobTypeUpdate,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     db_job_type = db.query(models.JobType).filter(
@@ -72,6 +74,7 @@ def update_job_type(
 def delete_job_type(
     job_type_id: int,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     db_job_type = db.query(models.JobType).filter(

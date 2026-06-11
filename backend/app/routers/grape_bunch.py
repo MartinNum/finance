@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..auth import get_current_park_id
+from ..auth import get_current_park_id, require_edit_permission
 from ..deps import validate_cycle_ownership
 from ..models import GrapeBunchConfig
 from .. import schemas
@@ -37,6 +37,7 @@ def update_grape_bunch_config(
     cycle_id: int,
     data: schemas.GrapeBunchConfigUpdate,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     validate_cycle_ownership(cycle_id, park_id, db)

@@ -33,6 +33,17 @@
           </el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="编辑权限" width="100">
+        <template #default="{ row }">
+          <el-switch
+            v-if="row.role !== 'admin'"
+            :model-value="!!row.can_edit"
+            @change="(val) => toggleCanEdit(row, val)"
+            size="small"
+          />
+          <span v-else>-</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="260">
         <template #default="{ row }">
           <el-button size="small" @click="openEdit(row)">编辑</el-button>
@@ -70,6 +81,9 @@
           <el-select v-model="createForm.park_id" style="width: 100%" placeholder="选择园区">
             <el-option v-for="p in parks" :key="p.id" :label="p.name" :value="p.id" />
           </el-select>
+        </el-form-item>
+        <el-form-item v-if="createForm.role === 'user'" label="编辑权限">
+          <el-switch v-model="createForm.can_edit" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -123,7 +137,7 @@ const showCreate = ref(false)
 const showEdit = ref(false)
 const showResetPwd = ref(false)
 
-const createForm = reactive({ username: '', password: '', display_name: '', role: 'user', park_id: null })
+const createForm = reactive({ username: '', password: '', display_name: '', role: 'user', park_id: null, can_edit: true })
 const editForm = reactive({ id: null, display_name: '', park_id: null })
 const resetPwdForm = reactive({ id: null, new_password: '' })
 
@@ -151,6 +165,7 @@ const openCreate = () => {
   createForm.display_name = ''
   createForm.role = 'user'
   createForm.park_id = null
+  createForm.can_edit = true
   showCreate.value = true
 }
 
@@ -221,6 +236,16 @@ const toggleActive = async (row) => {
   try {
     await adminApi.updateUser(row.id, { is_active: !row.is_active })
     ElMessage.success(row.is_active ? '已停用' : '已启用')
+    loadUsers()
+  } catch (e) {
+    ElMessage.error(e.response?.data?.detail || '操作失败')
+  }
+}
+
+const toggleCanEdit = async (row, val) => {
+  try {
+    await adminApi.updateUser(row.id, { can_edit: val })
+    ElMessage.success(val ? '已开启编辑权限' : '已关闭编辑权限')
     loadUsers()
   } catch (e) {
     ElMessage.error(e.response?.data?.detail || '操作失败')

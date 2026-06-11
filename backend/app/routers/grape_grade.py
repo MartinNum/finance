@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from ..database import get_db
-from ..auth import get_current_park_id
+from ..auth import get_current_park_id, require_edit_permission
 from .. import models, schemas
 
 router = APIRouter()
@@ -23,6 +23,7 @@ def list_grape_grades(
 def create_grape_grade(
     item: schemas.GrapeGradeCreate,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     if db.query(models.GrapeGrade).filter(
@@ -47,6 +48,7 @@ def update_grape_grade(
     item_id: int,
     item: schemas.GrapeGradeUpdate,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     db_item = db.query(models.GrapeGrade).filter(
@@ -67,6 +69,7 @@ def update_grape_grade(
 def delete_grape_grade(
     item_id: int,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     db_item = db.query(models.GrapeGrade).filter(

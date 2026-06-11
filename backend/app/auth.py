@@ -72,3 +72,11 @@ def get_current_park_id(
             raise HTTPException(status_code=400, detail="管理员需要指定园区（X-Park-Id）")
         return x_park_id
     return current_user.park_id
+
+
+def require_edit_permission(current_user: models.User = Depends(get_current_user)) -> models.User:
+    if current_user.role == "admin":
+        return current_user
+    if not current_user.can_edit:
+        raise HTTPException(status_code=403, detail="没有编辑权限")
+    return current_user

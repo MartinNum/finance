@@ -30,6 +30,7 @@ class User(Base):
     role = Column(String, nullable=False, default="user")
     park_id = Column(Integer, ForeignKey("parks.id"), nullable=True)
     is_active = Column(Boolean, default=True)
+    can_edit = Column(Boolean, default=True)
     created_at = Column(DateTime, server_default=func.now())
 
     park = relationship("Park", back_populates="users")

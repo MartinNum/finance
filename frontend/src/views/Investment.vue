@@ -31,7 +31,7 @@
       </el-col>
     </el-row>
 
-    <el-card style="margin-bottom: 20px">
+    <el-card v-if="canEdit()" style="margin-bottom: 20px">
       <template #header>新增投资记录</template>
       <el-form :model="form" label-width="100" inline>
         <el-form-item label="投资人">
@@ -68,7 +68,7 @@
           <template #default="{ row }">¥ {{ row.amount.toFixed(2) }}</template>
         </el-table-column>
         <el-table-column prop="remark" label="备注" />
-        <el-table-column label="操作" width="100">
+        <el-table-column v-if="canEdit()" label="操作" width="100">
           <template #default="{ row }">
             <el-button size="small" type="danger" @click="deleteInvestment(row.id)">删除</el-button>
           </template>
@@ -83,8 +83,10 @@ import { ref, computed, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { investmentApi } from '../api'
 import { useCycleStore } from '../store/cycle.js'
+import { useAuthStore } from '../store/auth'
 
 const cycleStore = useCycleStore()
+const { canEdit } = useAuthStore()
 const investments = ref([])
 const balanceData = ref({ total_investment: 0, total_expense: 0, balance: 0 })
 const filterInvestor = ref('')

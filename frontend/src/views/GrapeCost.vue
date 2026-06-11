@@ -50,7 +50,7 @@
               <span v-if="bunchConfig.calc_mode === 'by_weight'" style="margin-left: 8px; color: #E6A23C; font-size: 12px">（自动计算）</span>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="saveBunchConfig">保存产出数据</el-button>
+              <el-button v-if="canEdit()" type="primary" @click="saveBunchConfig">保存产出数据</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -96,8 +96,10 @@ import { ref, computed, onMounted } from 'vue'
 import { reportApi, grapeBunchApi } from '../api'
 import { useCycleStore } from '../store/cycle.js'
 import { ElMessage } from 'element-plus'
+import { useAuthStore } from '../store/auth'
 
 const cycleStore = useCycleStore()
+const { canEdit } = useAuthStore()
 const dateRange = ref(null)
 const form = ref({ totalInvestment: 0 })
 const breakdownData = ref([])

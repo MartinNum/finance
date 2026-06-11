@@ -28,6 +28,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
             "role": user.role,
             "park_id": user.park_id,
             "park_name": user.park.name if user.park else None,
+            "can_edit": user.can_edit,
         },
     }
 
@@ -41,6 +42,7 @@ def get_me(current_user: models.User = Depends(get_current_user)):
         "role": current_user.role,
         "park_id": current_user.park_id,
         "park_name": current_user.park.name if current_user.park else None,
+        "can_edit": current_user.can_edit,
     }
 
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>支出录入</h2>
-    <el-card style="margin-bottom: 20px">
+    <el-card v-if="canEdit()" style="margin-bottom: 20px">
       <el-form :model="form" label-width="80" inline>
         <el-form-item label="大类">
           <el-select v-model="form.category" placeholder="请选择大类" @change="onCategoryChange" style="width: 160px">
@@ -49,7 +49,7 @@
         <el-table-column prop="sub_category" label="子类" width="140" />
         <el-table-column prop="amount" label="金额" />
         <el-table-column prop="remark" label="备注" />
-        <el-table-column label="操作" width="160">
+        <el-table-column v-if="canEdit()" label="操作" width="160">
           <template #default="{ row }">
             <el-button size="small" type="primary" @click="openEditDialog(row)">编辑</el-button>
             <el-button size="small" type="danger" @click="deleteExpense(row.id)">删除</el-button>
@@ -93,8 +93,10 @@ import { ref, computed, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { expenseApi, expenseCategoryApi } from '../api'
 import { useCycleStore } from '../store/cycle.js'
+import { useAuthStore } from '../store/auth'
 
 const cycleStore = useCycleStore()
+const { canEdit } = useAuthStore()
 const categories = ref([])
 const categoryOptions = computed(() => [...new Set(categories.value.map(c => c.category))])
 const subCategoryOptions = computed(() =>

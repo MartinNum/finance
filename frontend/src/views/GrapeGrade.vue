@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>葡萄等级管理</h2>
-    <el-button type="primary" @click="showDialog">添加等级</el-button>
+    <el-button v-if="canEdit()" type="primary" @click="showDialog">添加等级</el-button>
     <el-table :data="grades" style="margin-top: 20px" border>
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="name" label="等级名称" />
@@ -13,7 +13,7 @@
           <el-tag :type="row.is_active ? 'success' : 'info'">{{ row.is_active ? '启用' : '停用' }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="200">
+      <el-table-column v-if="canEdit()" label="操作" width="200">
         <template #default="{ row }">
           <el-button size="small" @click="editGrade(row)">编辑</el-button>
           <el-button size="small" type="danger" @click="deleteGrade(row.id)">删除</el-button>
@@ -46,8 +46,10 @@
 import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { grapeGradeApi } from '../api'
+import { useAuthStore } from '../store/auth'
 
 const grades = ref([])
+const { canEdit } = useAuthStore()
 const dialogVisible = ref(false)
 const isEdit = ref(false)
 const form = ref({ name: '', default_price: 0, is_active: true })

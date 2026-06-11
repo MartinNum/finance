@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from ..database import get_db
-from ..auth import get_current_park_id
+from ..auth import get_current_park_id, require_edit_permission
 from .. import models, schemas
 
 router = APIRouter()
@@ -24,6 +24,7 @@ def list_expense_categories(
 def create_expense_category(
     item: schemas.ExpenseCategoryCreate,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     existing = db.query(models.ExpenseCategory).filter(
@@ -55,6 +56,7 @@ def create_expense_category(
 def delete_expense_category(
     item_id: int,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     db_item = db.query(models.ExpenseCategory).filter(

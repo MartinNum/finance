@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from ..database import get_db
-from ..auth import get_current_park_id
+from ..auth import get_current_park_id, require_edit_permission
 from .. import models, schemas
 
 router = APIRouter()
@@ -23,6 +23,7 @@ def list_cycles(
 def create_cycle(
     cycle: schemas.CycleCreate,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     existing = db.query(models.Cycle).filter(
@@ -51,6 +52,7 @@ def update_cycle(
     cycle_id: int,
     cycle: schemas.CycleUpdate,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     db_cycle = db.query(models.Cycle).filter(
@@ -72,6 +74,7 @@ def update_cycle(
 def delete_cycle(
     cycle_id: int,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     db_cycle = db.query(models.Cycle).filter(
@@ -92,6 +95,7 @@ def delete_cycle(
 def activate_cycle(
     cycle_id: int,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     db_cycle = db.query(models.Cycle).filter(

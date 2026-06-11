@@ -35,7 +35,8 @@ function setCurrentParkId(parkId) {
 
 const isAdmin = () => state.user?.role === 'admin'
 const isLoggedIn = () => !!state.token
+const canEdit = () => state.user?.role === 'admin' || state.user?.can_edit !== false
 
 export function useAuthStore() {
-  return { state, login, logout, setCurrentParkId, isAdmin, isLoggedIn }
+  return { state, login, logout, setCurrentParkId, isAdmin, isLoggedIn, canEdit }
 }

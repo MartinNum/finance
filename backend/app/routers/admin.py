@@ -93,6 +93,7 @@ def create_user(
         display_name=user.display_name,
         role=user.role,
         park_id=user.park_id,
+        can_edit=user.can_edit,
     )
     db.add(db_user)
     db.commit()

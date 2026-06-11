@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>周期管理</h2>
-    <el-button type="primary" @click="showDialog">新建周期</el-button>
+    <el-button v-if="canEdit()" type="primary" @click="showDialog">新建周期</el-button>
     <el-table :data="cycles" style="margin-top: 20px" border>
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="name" label="周期名称" />
@@ -14,7 +14,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="250">
+      <el-table-column v-if="canEdit()" label="操作" width="250">
         <template #default="{ row }">
           <el-button size="small" type="success" @click="activateCycle(row.id)" :disabled="row.is_current">设为当前</el-button>
           <el-button size="small" @click="editCycle(row)">编辑</el-button>
@@ -48,8 +48,10 @@ import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { cycleApi } from '../api'
 import { useCycleStore } from '../store/cycle.js'
+import { useAuthStore } from '../store/auth'
 
 const cycleStore = useCycleStore()
+const { canEdit } = useAuthStore()
 const cycles = ref([])
 const dialogVisible = ref(false)
 const isEdit = ref(false)

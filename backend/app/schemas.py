@@ -18,6 +18,7 @@ class UserInfo(BaseModel):
     role: str
     park_id: Optional[int] = None
     park_name: Optional[str] = None
+    can_edit: bool = True
 
 
 class PasswordChange(BaseModel):
@@ -58,12 +59,14 @@ class UserCreate(BaseModel):
     display_name: str
     role: str = "user"
     park_id: Optional[int] = None
+    can_edit: bool = True
 
 
 class UserUpdate(BaseModel):
     display_name: Optional[str] = None
     is_active: Optional[bool] = None
     park_id: Optional[int] = None
+    can_edit: Optional[bool] = None
 
 
 class UserResponse(BaseModel):
@@ -73,6 +76,7 @@ class UserResponse(BaseModel):
     role: str
     park_id: Optional[int] = None
     is_active: bool
+    can_edit: bool = True
     created_at: Optional[datetime] = None
 
     class Config:

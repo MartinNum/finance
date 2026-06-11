@@ -1,12 +1,12 @@
 <template>
   <div>
     <h2>支出分类管理</h2>
-    <el-button type="primary" @click="showDialog">添加分类</el-button>
+    <el-button v-if="canEdit()" type="primary" @click="showDialog">添加分类</el-button>
     <el-table :data="categories" style="margin-top: 20px" border>
       <el-table-column prop="id" label="ID" width="80" />
       <el-table-column prop="category" label="大类" />
       <el-table-column prop="sub_category" label="子类" />
-      <el-table-column label="操作" width="120">
+      <el-table-column v-if="canEdit()" label="操作" width="120">
         <template #default="{ row }">
           <el-button size="small" type="danger" @click="deleteCategory(row.id)">删除</el-button>
         </template>
@@ -39,8 +39,10 @@
 import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { expenseCategoryApi } from '../api'
+import { useAuthStore } from '../store/auth'
 
 const categories = ref([])
+const { canEdit } = useAuthStore()
 const dialogVisible = ref(false)
 const form = ref({
   category: '',

@@ -4,7 +4,7 @@ from sqlalchemy import func
 from typing import List, Optional
 
 from ..database import get_db
-from ..auth import get_current_park_id
+from ..auth import get_current_park_id, require_edit_permission
 from ..deps import validate_cycle_ownership
 from .. import models, schemas
 
@@ -29,6 +29,7 @@ def list_investments(
 def create_investment(
     item: schemas.InvestmentCreate,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     validate_cycle_ownership(item.cycle_id, park_id, db)
@@ -49,6 +50,7 @@ def create_investment(
 def delete_investment(
     item_id: int,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     db_item = db.query(models.Investment).filter(models.Investment.id == item_id).first()

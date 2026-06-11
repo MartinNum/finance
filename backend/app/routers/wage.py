@@ -5,7 +5,7 @@ from typing import List, Optional
 from datetime import date
 
 from ..database import get_db
-from ..auth import get_current_park_id
+from ..auth import get_current_park_id, require_edit_permission
 from ..deps import validate_cycle_ownership
 from .. import models, schemas
 
@@ -40,6 +40,7 @@ def list_wages(
 def create_wage(
     wage: schemas.WageCreate,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     validate_cycle_ownership(wage.cycle_id, park_id, db)
@@ -66,6 +67,7 @@ def update_wage(
     wage_id: int,
     wage: schemas.WageUpdate,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     db_wage = db.query(models.Wage).filter(models.Wage.id == wage_id).first()
@@ -87,6 +89,7 @@ def update_wage(
 def delete_wage(
     wage_id: int,
     park_id: int = Depends(get_current_park_id),
+    _editor=Depends(require_edit_permission),
     db: Session = Depends(get_db),
 ):
     db_wage = db.query(models.Wage).filter(models.Wage.id == wage_id).first()
