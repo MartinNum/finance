@@ -15,5 +15,8 @@ dist/
 # OS
 .DS_Store
 
+# RSA keys
+backend/keys/
+
 # Claude
 .claude/

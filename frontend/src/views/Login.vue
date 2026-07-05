@@ -61,10 +61,7 @@ const handleLogin = async () => {
   }
   loading.value = true
   try {
-    const params = new URLSearchParams()
-    params.append('username', form.username)
-    params.append('password', form.password)
-    const res = await authApi.login(params)
+    const res = await authApi.login({ username: form.username, password: form.password })
     authStore.login(res.data.access_token, res.data.user)
     ElMessage.success('登录成功')
     router.push('/')

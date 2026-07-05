@@ -1,7 +1,12 @@
 import os
+import base64
 from datetime import datetime, timedelta
+from pathlib import Path
 from typing import Optional
 
+from cryptography.hazmat.primitives.asymmetric import rsa, padding
+from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
+from cryptography.hazmat.primitives import serialization
 from fastapi import Depends, HTTPException, status, Header
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
@@ -80,3 +85,49 @@ def require_edit_permission(current_user: models.User = Depends(get_current_user
     if not current_user.can_edit:
         raise HTTPException(status_code=403, detail="没有编辑权限")
     return current_user
+
+
+# ---- RSA 非对称加密：前端用公钥加密密码，后端用私钥解密 ----
+
+_KEYS_DIR = Path(__file__).resolve().parent.parent / "keys"
+_PRIVATE_KEY_PATH = _KEYS_DIR / "private.pem"
+_PUBLIC_KEY_PATH = _KEYS_DIR / "public.pem"
+
+
+def _load_or_create_keys():
+    _KEYS_DIR.mkdir(exist_ok=True)
+    if _PRIVATE_KEY_PATH.exists() and _PUBLIC_KEY_PATH.exists():
+        private_pem = _PRIVATE_KEY_PATH.read_bytes()
+        public_pem = _PUBLIC_KEY_PATH.read_bytes()
+    else:
+        private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+        private_pem = private_key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.PKCS8,
+            encryption_algorithm=serialization.NoEncryption(),
+        )
+        public_pem = private_key.public_key().public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo,
+        )
+        _PRIVATE_KEY_PATH.write_bytes(private_pem)
+        _PUBLIC_KEY_PATH.write_bytes(public_pem)
+        try:
+            os.chmod(_PRIVATE_KEY_PATH, 0o600)
+        except OSError:
+            pass
+    return private_pem, public_pem
+
+
+_PRIVATE_PEM, PUBLIC_PEM = _load_or_create_keys()
+_PRIVATE_KEY: RSAPrivateKey = serialization.load_pem_private_key(_PRIVATE_PEM, password=None)
+
+
+def get_public_key_pem() -> str:
+    return PUBLIC_PEM.decode("utf-8")
+
+
+def decrypt_password(cipher_b64: str) -> str:
+    cipher = base64.b64decode(cipher_b64)
+    plain = _PRIVATE_KEY.decrypt(cipher, padding.PKCS1v15())
+    return plain.decode("utf-8")

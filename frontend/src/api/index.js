@@ -1,4 +1,5 @@
 import axios from 'axios'
+import JSEncrypt from 'jsencrypt'
 import { useAuthStore } from '../store/auth.js'
 
 const api = axios.create({
@@ -29,13 +30,37 @@ api.interceptors.response.use(
   }
 )
 
+// ---- RSA 密码加密 ----
+let _publicKey = null
+
+async function getPublicKey() {
+  if (_publicKey) return _publicKey
+  const res = await axios.get('/api/auth/public-key')
+  _publicKey = res.data.public_key
+  return _publicKey
+}
+
+async function encryptPassword(plain) {
+  const publicKey = await getPublicKey()
+  const encryptor = new JSEncrypt()
+  encryptor.setPublicKey(publicKey)
+  const enc = encryptor.encrypt(plain)
+  if (!enc) throw new Error('密码加密失败')
+  return enc
+}
+
 // Auth
 export const authApi = {
-  login: (data) => api.post('/auth/login', data, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-  }),
+  login: async (data) => {
+    const encrypted = await encryptPassword(data.password)
+    return api.post('/auth/login', { username: data.username, password: encrypted })
+  },
   me: () => api.get('/auth/me'),
-  changePassword: (data) => api.put('/auth/password', data),
+  changePassword: async (data) => {
+    const oldEnc = await encryptPassword(data.old_password)
+    const newEnc = await encryptPassword(data.new_password)
+    return api.put('/auth/password', { old_password: oldEnc, new_password: newEnc })
+  },
 }
 
 // Admin
@@ -45,9 +70,15 @@ export const adminApi = {
   updatePark: (id, data) => api.put(`/admin/parks/${id}`, data),
   deletePark: (id) => api.delete(`/admin/parks/${id}`),
   listUsers: (params) => api.get('/admin/users', { params }),
-  createUser: (data) => api.post('/admin/users', data),
+  createUser: async (data) => {
+    const enc = await encryptPassword(data.password)
+    return api.post('/admin/users', { ...data, password: enc })
+  },
   updateUser: (id, data) => api.put(`/admin/users/${id}`, data),
-  resetPassword: (id, data) => api.put(`/admin/users/${id}/reset-password`, data),
+  resetPassword: async (id, data) => {
+    const enc = await encryptPassword(data.new_password)
+    return api.put(`/admin/users/${id}/reset-password`, { new_password: enc })
+  },
 }
 
 // Cycles

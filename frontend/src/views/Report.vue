@@ -47,7 +47,7 @@
       <template #header>
         <div style="display: flex; justify-content: space-between; align-items: center">
           <span>「{{ selectedCategory }}」明细</span>
-          <el-tag type="info">合计：¥ {{ categoryDetails.reduce((s, r) => s + r.amount, 0).toFixed(2) }}</el-tag>
+          <el-tag type="info">合计：¥ {{ filteredDetails.reduce((s, r) => s + r.amount, 0).toFixed(2) }}</el-tag>
         </div>
       </template>
 
@@ -67,8 +67,14 @@
           </el-table>
         </el-col>
         <el-col :span="14">
+          <div v-if="selectedSubName" style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px">
+            <el-tag type="warning" size="large" closable @close="clearSubFilter">
+              当前筛选：{{ selectedSubName }}
+            </el-tag>
+            <el-button text type="primary" @click="clearSubFilter">显示全部</el-button>
+          </div>
           <!-- 工资明细 -->
-          <el-table v-if="detailType === 'wage'" :data="categoryDetails" border>
+          <el-table v-if="detailType === 'wage'" :data="filteredDetails" border>
             <el-table-column prop="expense_date" label="日期" width="120" />
             <el-table-column label="工种">
               <template #default="{ row }">{{ row.job_type?.name }}</template>
@@ -88,7 +94,7 @@
           </el-table>
 
           <!-- 支出明细 -->
-          <el-table v-else :data="categoryDetails" border>
+          <el-table v-else :data="filteredDetails" border>
             <el-table-column prop="expense_date" label="日期" width="120" />
             <el-table-column prop="sub_category" label="子类" width="140" />
             <el-table-column prop="amount" label="金额">
@@ -103,7 +109,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import * as echarts from 'echarts'
 import { reportApi, expenseApi, wageApi } from '../api'
 import { useCycleStore } from '../store/cycle.js'
@@ -123,13 +129,32 @@ const detailLoading = ref(false)
 const subPieRef = ref(null)
 let subPieChart = null
 
+// 子饼图扇区筛选
+const selectedSubName = ref('')
+const filteredDetails = computed(() => {
+  if (!selectedSubName.value) return categoryDetails.value
+  if (detailType.value === 'wage') {
+    return categoryDetails.value.filter(r => (r.job_type?.name || '未知') === selectedSubName.value)
+  }
+  return categoryDetails.value.filter(r => r.sub_category === selectedSubName.value)
+})
+const clearSubFilter = () => { selectedSubName.value = '' }
+
 const renderSubPieChart = (data) => {
   const total = data.reduce((s, r) => s + r.value, 0)
   subSummary.value = data.map(r => ({ ...r, ratio: total > 0 ? r.value / total : 0 }))
     .sort((a, b) => b.ratio - a.ratio)
   nextTick(() => {
     if (!subPieRef.value) return
-    if (!subPieChart) subPieChart = echarts.init(subPieRef.value)
+    if (!subPieChart) {
+      subPieChart = echarts.init(subPieRef.value)
+      subPieChart.on('click', (params) => {
+        if (params.componentType === 'series') {
+          // 再次点击同一项则取消筛选
+          selectedSubName.value = selectedSubName.value === params.name ? '' : params.name
+        }
+      })
+    }
     subPieChart.setOption({
       tooltip: { trigger: 'item', formatter: '{b}: ¥{c} ({d}%)' },
       legend: { orient: 'vertical', left: 'left', textStyle: { fontSize: 11 } },
@@ -198,6 +223,7 @@ const loadReport = async () => {
 
 const loadCategoryDetails = async (categoryName) => {
   selectedCategory.value = categoryName
+  selectedSubName.value = ''
   detailLoading.value = true
   categoryDetails.value = []
   subSummary.value = []

@@ -1,18 +1,26 @@
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from ..database import get_db
-from ..auth import verify_password, hash_password, create_access_token, get_current_user
+from ..auth import verify_password, hash_password, create_access_token, get_current_user, get_public_key_pem, decrypt_password
 from .. import models, schemas
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
+@router.get("/public-key")
+def get_public_key():
+    return {"public_key": get_public_key_pem()}
+
+
 @router.post("/login", response_model=schemas.LoginResponse)
-def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = db.query(models.User).filter(models.User.username == form_data.username).first()
-    if not user or not verify_password(form_data.password, user.hashed_password):
+def login(data: schemas.LoginRequest, db: Session = Depends(get_db)):
+    try:
+        password = decrypt_password(data.password)
+    except Exception:
+        raise HTTPException(status_code=400, detail="密码解密失败，请刷新页面重试")
+    user = db.query(models.User).filter(models.User.username == data.username).first()
+    if not user or not verify_password(password, user.hashed_password):
         raise HTTPException(status_code=401, detail="用户名或密码错误")
     if not user.is_active:
         raise HTTPException(status_code=403, detail="账号已禁用")
@@ -52,8 +60,13 @@ def change_password(
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    if not verify_password(data.old_password, current_user.hashed_password):
+    try:
+        old_password = decrypt_password(data.old_password)
+        new_password = decrypt_password(data.new_password)
+    except Exception:
+        raise HTTPException(status_code=400, detail="密码解密失败，请刷新页面重试")
+    if not verify_password(old_password, current_user.hashed_password):
         raise HTTPException(status_code=400, detail="原密码错误")
-    current_user.hashed_password = hash_password(data.new_password)
+    current_user.hashed_password = hash_password(new_password)
     db.commit()
     return {"message": "密码修改成功"}
